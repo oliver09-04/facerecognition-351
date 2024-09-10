@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Detection System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-purple-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md text-center w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-2">Credit Card Detection System</h1>
+        <p class="text-gray-600 mb-6">Detect fraud by verifying credit card information with face recognition.</p>
+        
+        <form id="detectionForm" enctype="multipart/form-data">
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold mb-2">Upload Credit Card Image</h2>
+                <input type="file" name="creditCardImage" class="block mx-auto mb-4" required>
+            </div>
+            
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold mb-2">Capture Face Image</h2>
+                <input type="file" name="faceImage" class="block mx-auto mb-4" required>
+            </div>
+            
+            <div class="flex justify-center space-x-4 mb-6">
+                <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded">Start Detection</button>
+                <button type="reset" class="bg-purple-500 text-white px-4 py-2 rounded">Reset</button>
+            </div>
+        </form>
+        
+        <div>
+            <h2 class="text-lg font-semibold mb-2">Detection Results</h2>
+            <p id="results" class="text-gray-600">No results yet.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('detectionForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/detect', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('results').textContent = result.message;
+        });
+    </script>
+</body>
+</html>

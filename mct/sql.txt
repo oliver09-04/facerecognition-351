@@ -1,0 +1,11 @@
+-- database.sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    face_descriptor BLOB
+);
+
+INSERT INTO users (id, face_descriptor) VALUES
+    (1, 'face_descriptor_1'),
+    (2, 'face_descriptor_2'),
+    ...
+;

@@ -1,0 +1,44 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Card Fraud Detection System</title>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+    <h1>ATM Card Fraud Detection System</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const faceDetector = new faceapi.FaceDetector(video);
+        
+        video.addEventListener('play', async () => {
+            const detection = await faceDetector.detect(video);
+            if (detection) {
+                const faceDescriptor = detection.descriptor;
+                // Send face descriptor to backend for verification
+                fetch('/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ faceDescriptor })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.verified) {
+                        console.log('Face verified!');
+                    } else {
+                        console.log('Face not verified!');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+</body>
+</html>
